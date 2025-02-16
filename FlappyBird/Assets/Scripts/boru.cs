@@ -1,22 +1,36 @@
 using UnityEngine;
 
-public class boru : MonoBehaviour
+public class Boru : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    [Header("Boru Ayarları")]
+    public float minY = -2.5f; // En düşük boru yüksekliği
+    public float maxY = -1.3f; // En yüksek boru yüksekliği
+    public float hareketHizi = 2f; // Borunun hareket hızı
+    public float yokOlmaX = -1f; // Borunun silineceği X konumu
+
     void Start()
     {
-        float rast = Random.Range(-2.368884f, -1.365697f);
-        transform.position = new Vector3(1f, rast, transform.position.z);
+        float rastgeleYukseklik = Random.Range(minY, maxY);
+        transform.position = new Vector3(transform.position.x, rastgeleYukseklik, transform.position.z);
     }
 
-    // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
+        // Boruyu sola hareket ettir
+        transform.Translate(Vector3.left * hareketHizi * Time.fixedDeltaTime);
 
-        if(transform.position.x <= -0.5f){
+        // Eğer boru ekran dışına çıkarsa yok et
+        if (transform.position.x <= yokOlmaX)
+        {
+            DestroyBoru();
+        }
+    }
+
+    void DestroyBoru()
+    {
+        if (gameObject != null)
+        {
             Destroy(gameObject);
         }
-
-        transform.Translate(-0.2f * Time.deltaTime, 0, 0);
     }
 }
